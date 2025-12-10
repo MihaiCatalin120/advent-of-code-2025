@@ -15,16 +15,27 @@ char *replace_char(char *str, char find, char replace) {
   return str;
 }
 
-bool checkID(unsigned long long *id) {
+bool checkID(unsigned long long id) {
   // https://stackoverflow.com/a/32819876
-  int length = snprintf(NULL, 0, "%llu", *id);
+  int length = snprintf(NULL, 0, "%llu", id);
   char *idString = malloc(length + 1);
-  snprintf(idString, length + 1, "%llu", *id);
-  int substringLength = 1;
+  snprintf(idString, length + 1, "%llu", id);
+  int substringLength = 1, i = 0;
+  printf("\n\nChecking ID for %llu...\n", id);
 
-  // TODO: Search through idString
-  while (substringLength < length / 2) {
-    for (int i = 0; i < length - substringLength; i += substringLength) {
+  while (substringLength <= length / 2) {
+    // printf("Checking for substring length %d\n", substringLength);
+    for (i = 0; i < length - substringLength; i += substringLength) {
+      printf("Step %d - Comparing %c to %c\n", substringLength, idString[i],
+             idString[i + substringLength]);
+      if (idString[i] != idString[i + substringLength])
+        break;
+    }
+
+    if (i >= length - substringLength) {
+      free(idString);
+      printf("Found invalid id: %llu\n", id);
+      return false;
     }
 
     substringLength++;
@@ -52,8 +63,8 @@ void addFromRange(char *range, unsigned long long *sum) {
 }
 
 int main() {
-  // FILE *f = fopen("2_test_in.txt", "r");
-  FILE *f = fopen("2_in.txt", "r");
+  FILE *f = fopen("2_test_in.txt", "r");
+  // FILE *f = fopen("2_in.txt", "r");
   assert(f != NULL);
 
   char currentChar;
