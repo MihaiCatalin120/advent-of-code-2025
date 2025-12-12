@@ -21,18 +21,25 @@ bool checkID(unsigned long long id) {
   char *idString = malloc(length + 1);
   snprintf(idString, length + 1, "%llu", id);
   int substringLength = 1, i = 0;
-  printf("\n\nChecking ID for %llu...\n", id);
+  int startIndex = 0;
+  // printf("\n\nChecking ID for %llu...\n", id);
 
   while (substringLength <= length / 2) {
-    // printf("Checking for substring length %d\n", substringLength);
-    for (i = 0; i < length - substringLength; i += substringLength) {
-      printf("Step %d - Comparing %c to %c\n", substringLength, idString[i],
-             idString[i + substringLength]);
-      if (idString[i] != idString[i + substringLength])
-        break;
-    }
+    for (startIndex = 0; startIndex < substringLength; startIndex++) {
 
-    if (i >= length - substringLength) {
+      // printf("Checking for substring length %d\n", substringLength);
+      for (i = startIndex; i < length - substringLength; i += substringLength) {
+        // printf("Step %d - Comparing %c to %c\n", substringLength,
+        // idString[i],
+        //        idString[i + substringLength]);
+        if (idString[i] != idString[i + substringLength]) {
+          // no need to check further for this substring length
+          startIndex = substringLength + 1;
+          break;
+        }
+      }
+    }
+    if (startIndex == substringLength) {
       free(idString);
       printf("Found invalid id: %llu\n", id);
       return false;
@@ -63,8 +70,8 @@ void addFromRange(char *range, unsigned long long *sum) {
 }
 
 int main() {
-  FILE *f = fopen("2_test_in.txt", "r");
-  // FILE *f = fopen("2_in.txt", "r");
+  // FILE *f = fopen("2_test_in.txt", "r");
+  FILE *f = fopen("2_in.txt", "r");
   assert(f != NULL);
 
   char currentChar;
@@ -84,7 +91,6 @@ int main() {
     currentIDRangeIndex++;
 
     if (currentChar == ',') {
-      // printf("\n");
       idRangesIndex++;
       currentIDRangeIndex = 0;
     }
