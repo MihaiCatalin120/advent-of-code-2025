@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +38,8 @@ bool checkID(unsigned long long id) {
         }
       }
     }
-    if (startIndex == substringLength) {
+
+    if (startIndex == substringLength && i == length - 1) {
       free(idString);
       printf("Found invalid id: %llu\n", id);
       return false;
