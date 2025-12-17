@@ -38,7 +38,6 @@ long long getJoltage(char fileContents[]) {
   return strtoll(result, NULL, 10);
 }
 
-// This implementation fails on the test_in, where inputs are very very large
 int main() {
   // FILE *f = fopen("3_in.txt", "r");
   FILE *f = fopen("3_test_in.txt", "r");
